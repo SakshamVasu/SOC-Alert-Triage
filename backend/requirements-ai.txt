@@ -1,0 +1,5 @@
+# Optional: only needed when ENABLE_AI_SUMMARY=true
+-r requirements.txt
+transformers>=4.40
+torch>=2.2            # for AI_SUMMARY_BACKEND=local
+huggingface_hub>=0.23 # for AI_SUMMARY_BACKEND=api

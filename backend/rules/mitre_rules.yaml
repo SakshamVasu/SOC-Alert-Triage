@@ -1,0 +1,174 @@
+# =============================================================================
+# MITRE ATT&CK mapping rules
+# =============================================================================
+# One entry per technique. A rule fires when ANY of its match conditions hits:
+#
+#   rule_ids:   exact alert rule ID (Wazuh rule.id, Splunk signature_id)
+#   rule_names: case-insensitive SUBSTRING of the alert's rule name
+#   keywords:   case-insensitive SUBSTRING of rule name + description/raw log
+#   categories: exact (case-insensitive) Wazuh group / Splunk category token
+#   regex:      Python regex against rule name + description (case-insensitive)
+#
+# ORDER MATTERS: an alert can match several rules and keeps all of them, but
+# the FIRST match is shown as its primary technique. Put specific rules above
+# generic ones (e.g. "password spraying" above "brute force").
+#
+# After editing, either restart the backend or POST /api/rules/reload (the
+# "Reload rules" button in the UI) - existing alerts are re-mapped.
+#
+# Wazuh rule IDs below come from the default ruleset; verify them against your
+# own deployment (custom rules usually live in the 100000+ range).
+# =============================================================================
+
+rules:
+  # Listed first: "failures followed by a success" also contains brute-force
+  # wording, but the successful login is the more urgent finding.
+  - name: Valid account use after failures
+    technique_id: T1078
+    technique_name: Valid Accounts
+    tactic: Initial Access
+    match:
+      rule_ids: ["40112"]
+      keywords: ["failures followed by a success", "login success after multiple failures"]
+
+  # --- Credential Access ------------------------------------------------------
+  - name: Password spraying
+    technique_id: T1110.003
+    technique_name: "Brute Force: Password Spraying"
+    tactic: Credential Access
+    match:
+      keywords: ["password spray"]
+
+  - name: Brute force / repeated authentication failures
+    technique_id: T1110
+    technique_name: Brute Force
+    tactic: Credential Access
+    match:
+      rule_ids: ["5712", "5720", "5763", "60204"]
+      keywords: ["brute force", "multiple authentication failures", "multiple failed logon"]
+      categories: ["authentication_failures"]
+
+  - name: Credential dumping from LSASS
+    technique_id: T1003.001
+    technique_name: "OS Credential Dumping: LSASS Memory"
+    tactic: Credential Access
+    match:
+      keywords: ["mimikatz", "sekurlsa", "lsass"]
+
+  # --- Initial Access ---------------------------------------------------------
+  - name: Web application attack
+    technique_id: T1190
+    technique_name: Exploit Public-Facing Application
+    tactic: Initial Access
+    match:
+      rule_ids: ["31103", "31106", "31152", "31171"]
+      keywords: ["sql injection", "xss", "path traversal", "web attack", "command injection"]
+      # Not the bare Wazuh "attack" group: it is shared by many non-web rules.
+      categories: ["sql_injection", "web_attack"]
+
+  - name: Phishing attachment
+    technique_id: T1566.001
+    technique_name: "Phishing: Spearphishing Attachment"
+    tactic: Initial Access
+    match:
+      keywords: ["phishing", "malicious attachment"]
+
+  # --- Execution --------------------------------------------------------------
+  - name: Suspicious PowerShell
+    technique_id: T1059.001
+    technique_name: "Command and Scripting Interpreter: PowerShell"
+    tactic: Execution
+    match:
+      keywords: ["powershell"]
+      regex: ["-e(nc|ncodedcommand)?\\s+[A-Za-z0-9+/=]{20,}"]
+
+  - name: Unix shell / reverse shell
+    technique_id: T1059.004
+    technique_name: "Command and Scripting Interpreter: Unix Shell"
+    tactic: Execution
+    match:
+      keywords: ["reverse shell", "/bin/sh -i", "bash -i"]
+
+  - name: Scheduled task created
+    technique_id: T1053.005
+    technique_name: "Scheduled Task/Job: Scheduled Task"
+    tactic: Persistence
+    match:
+      keywords: ["schtasks", "scheduled task"]
+
+  # --- Persistence / Privilege Escalation ------------------------------------
+  - name: New local account
+    technique_id: T1136.001
+    technique_name: "Create Account: Local Account"
+    tactic: Persistence
+    match:
+      rule_ids: ["5902", "60109"]
+      keywords: ["new user added", "user account was created", "useradd"]
+
+  - name: Account added to privileged group
+    technique_id: T1098
+    technique_name: Account Manipulation
+    tactic: Persistence
+    match:
+      keywords: ["added to a security-enabled", "added to group", "domain admins", "administrators group"]
+
+  - name: Sudo abuse
+    technique_id: T1548.003
+    technique_name: "Abuse Elevation Control Mechanism: Sudo and Sudo Caching"
+    tactic: Privilege Escalation
+    match:
+      rule_ids: ["5401", "5404"]
+      keywords: ["failed attempts to run sudo"]
+
+  # --- Defense Evasion --------------------------------------------------------
+  - name: Event log cleared
+    technique_id: T1070.001
+    technique_name: "Indicator Removal: Clear Windows Event Logs"
+    tactic: Defense Evasion
+    match:
+      keywords: ["audit log was cleared", "log was cleared", "wevtutil cl"]
+
+  - name: Security tool disabled
+    technique_id: T1562.001
+    technique_name: "Impair Defenses: Disable or Modify Tools"
+    tactic: Defense Evasion
+    match:
+      keywords: ["real-time protection", "defender disabled", "antivirus disabled", "tamper protection"]
+
+  # --- Discovery / Lateral Movement ------------------------------------------
+  - name: Network scanning
+    technique_id: T1046
+    technique_name: Network Service Discovery
+    tactic: Discovery
+    match:
+      keywords: ["port scan", "nmap", "network scan"]
+
+  - name: Remote Desktop lateral movement
+    technique_id: T1021.001
+    technique_name: "Remote Services: Remote Desktop Protocol"
+    tactic: Lateral Movement
+    match:
+      keywords: ["remote desktop"]
+      regex: ["\\brdp\\b"]   # word boundary so "wordpress" does not match
+
+  # --- Command and Control / Impact ------------------------------------------
+  - name: Tool download
+    technique_id: T1105
+    technique_name: Ingress Tool Transfer
+    tactic: Command and Control
+    match:
+      keywords: ["certutil -urlcache", "wget http", "curl http", "invoke-webrequest"]
+
+  - name: C2 beaconing
+    technique_id: T1071.001
+    technique_name: "Application Layer Protocol: Web Protocols"
+    tactic: Command and Control
+    match:
+      keywords: ["beacon", "command and control", "c2 traffic"]
+
+  - name: Ransomware behaviour
+    technique_id: T1486
+    technique_name: Data Encrypted for Impact
+    tactic: Impact
+    match:
+      keywords: ["ransomware", "files encrypted", "ransom note"]

